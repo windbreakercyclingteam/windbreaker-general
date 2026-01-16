@@ -1,33 +1,27 @@
 {
   "name": "windbreaker-dashboard",
-  "version": "1.0.0",
-  "type": "module",
+  "version": "0.1.0",
   "private": true,
-  "sideEffects": false,
   "scripts": {
-    "dev": "kottster dev",
-    "dev:add-data-source": "kottster add-data-source",
-    "build": "vite build && kottster build:server",
-    "start": "node dist/server/server.cjs"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "@kottster/cli": "^3.x",
-    "@kottster/common": "^3.x",
-    "@kottster/react": "^3.x",
-    "@kottster/server": "^3.x",
-    "knex": "^3.1.0",
-    "pg": "^8.7.1",
-    "react": "^19.x",
-    "react-dom": "^19.x",
-    "react-router-dom": "^7.x"
+    "@plasmicapp/loader-nextjs": "^1.0.450",
+    "next": "16.1.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.x",
-    "tsx": "^4.x",
-    "vite": "^6.x",
-    "vite-tsconfig-paths": "^4.x"
-  },
-  "engines": {
-    "node": ">=20"
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
