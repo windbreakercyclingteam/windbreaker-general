@@ -7,10 +7,8 @@ export function getPlasmicLoader() {
     plasmicLoader = initPlasmicLoader({
       projects: [
         {
-          // THIS IS THE CORRECT ID FROM YOUR LINK
-          id: "wa7nk6HAnWkgnsQkSsW3sr",
-          // PASTE YOUR API TOKEN HERE
-          token: "YOUR_NEW_REGENERATED_TOKEN_HERE",
+          id: "1h4uDQ4Npe9cos6PwaUVtB",
+          token: "RYfPQ8LwWvsttR8S3r8cKYix56lBZpFc8N7OlmSkhVnaP0UuFk4LTXndjD3LCw3QxK7wOOmbxwoDol9ZS0rQ",
         },
       ],
     });
