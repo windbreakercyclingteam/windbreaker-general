@@ -17,6 +17,9 @@ jobs:
         run: |
           git config user.name "Deploy Bot"
           git config user.email "bot@windbreaker.app"
-          git pull origin main  
+          
+          # Force local branch to match remote exactly (Fixes "Rejected" errors)
+          git checkout -B main origin/main
+          
           git commit --allow-empty -m "Manual deploy from browser"
           git push origin main
