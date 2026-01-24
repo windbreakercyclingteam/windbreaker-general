@@ -1,0 +1,21 @@
+name: Manual Deploy Trigger
+
+on:
+  workflow_dispatch:  # This creates the "Run workflow" button
+
+permissions:
+  contents: write
+
+jobs:
+  trigger_appwrite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create empty commit
+        run: |
+          git config user.name "Deploy Bot"
+          git config user.email "bot@windbreaker.app"
+          git commit --allow-empty -m "Manual deploy from browser"
+          git push
