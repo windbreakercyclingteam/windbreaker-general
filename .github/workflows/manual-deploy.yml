@@ -13,15 +13,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # <--- This forces a full download, fixing "Rejected"
+          fetch-depth: 0  # Download all history
 
       - name: Trigger Deployment
         run: |
           git config user.name "Deploy Bot"
           git config user.email "bot@windbreaker.app"
           
-          # Reset to the very latest version of main
+          # Reset to the exact state of the remote
           git checkout -B main origin/main
           
           git commit --allow-empty -m "Manual deploy from browser"
-          git push origin main
+          
+          # FORCE PUSH (Bypasses the "rejected" error)
+          git push origin main --force
