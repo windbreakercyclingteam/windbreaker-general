@@ -13,9 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create empty commit
+      - name: Trigger Deployment
         run: |
           git config user.name "Deploy Bot"
           git config user.email "bot@windbreaker.app"
+          git pull origin main  
           git commit --allow-empty -m "Manual deploy from browser"
-          git push
+          git push origin main
