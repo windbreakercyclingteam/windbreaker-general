@@ -3,40 +3,46 @@ import {
   PlasmicRootProvider,
   extractPlasmicQueryData,
 } from "@plasmicapp/loader-nextjs";
-import { notFound } from "next/navigation";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { getPlasmicLoader } from "@/plasmic-init";
 
-export async function generateStaticParams() {
+// 1. getStaticPaths: Fetches the list of pages
+export const getStaticPaths: GetStaticPaths = async () => {
   const PLASMIC = getPlasmicLoader();
   const pages = await PLASMIC.fetchPages();
-  return pages.map((page: { path: string }) => {
-    if (page.path === "/") {
-      return { catchall: [] };
-    }
-    return {
-      catchall: page.path.substring(1).split("/"),
-    };
-  });
-}
+  
+  // --- DEBUG LOG ---
+  console.log("PLASMIC RETURNED THESE PAGES:", pages);
+  // -----------------
 
-export default async function CatchallPage({
-  params,
-}: {
-  params: { catchall?: string[] };
-}) {
+  return {
+    paths: pages.map((page) => ({
+      params: {
+        catchall: page.path === "/" ? [] : page.path.substring(1).split("/"),
+      },
+    })),
+    fallback: "blocking",
+  };
+};
+
+// 2. getStaticProps: Fetches data for the specific page
+export const getStaticProps: GetStaticProps = async (context) => {
   const PLASMIC = getPlasmicLoader();
-  const catchall = params.catchall || [];
+  
+  // Safe access to catchall
+  const catchall = (context.params?.catchall as string[]) || [];
   const pagePath = "/" + catchall.join("/");
 
   const plasmicData = await PLASMIC.fetchComponentData(pagePath);
-
+  
   if (!plasmicData) {
-    notFound();
+    return { notFound: true };
   }
 
   const pageMeta = plasmicData.entryCompMetas[0];
 
-  const queryCache = await extractPlasmicQueryData(
+  // Cache data for performance
+  const cache = await extractPlasmicQueryData(
     <PlasmicRootProvider
       loader={PLASMIC}
       prefetchedData={plasmicData}
@@ -47,11 +53,25 @@ export default async function CatchallPage({
     </PlasmicRootProvider>
   );
 
+  return {
+    props: {
+      plasmicData,
+      prefetchedQueryData: cache,
+    },
+  };
+};
+
+// 3. CatchallPage: Renders the page
+// NOTE: This receives 'props', not 'params'
+export default function CatchallPage(props: any) {
+  const { plasmicData, prefetchedQueryData } = props;
+  const pageMeta = plasmicData.entryCompMetas[0];
+
   return (
     <PlasmicRootProvider
-      loader={PLASMIC}
+      loader={getPlasmicLoader()}
       prefetchedData={plasmicData}
-      prefetchedQueryData={queryCache}
+      prefetchedQueryData={prefetchedQueryData}
       pageRoute={pageMeta.path}
       pageParams={pageMeta.params}
     >
